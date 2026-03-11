@@ -1,0 +1,196 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --primary-bg: radial-gradient(circle at top left, #1a1a2e, #16213e, #0f3460);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --accent-purple: #a413ec;
+  --accent-teal: #00d2ff;
+  --accent-red: #ff4b2b;
+  --error-highlight: rgba(255, 230, 0, 0.2);
+  --filler-highlight: rgba(255, 100, 100, 0.2);
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  font-family: "Inter", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--primary-bg);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  font-family: 'Lexend', sans-serif;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0; /* Remove rounded corners for full screen feel */
+}
+
+@media (min-width: 768px) {
+  .glass-card {
+    padding: 3rem 4rem;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-purple), #6a11cb);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-family: "Lexend", sans-serif;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(164, 19, 236, 0.3);
+  font-size: 1.1rem;
+}
+
+@media (min-width: 768px) {
+  .btn-primary {
+    padding: 1.25rem 2rem;
+    font-size: 1.2rem;
+  }
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(164, 19, 236, 0.5);
+  filter: brightness(1.1);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid var(--glass-border);
+  padding: 0.8rem 1.5rem;
+  border-radius: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .btn-secondary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.recording-pulse {
+  width: 12px;
+  height: 12px;
+  background-color: var(--accent-red);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  animation: pulse 2s infinite;
+}
+
+@media (min-width: 768px) {
+  .recording-pulse {
+    width: 14px;
+    height: 14px;
+    margin-right: 12px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 12px rgba(255, 75, 43, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 75, 43, 0);
+  }
+}
+
+.highlight-grammar {
+  background-color: var(--error-highlight);
+  border-bottom: 2px solid #ffd700;
+  cursor: help;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.highlight-filler {
+  background-color: var(--filler-highlight);
+  border-bottom: 2px solid #ff6464;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.circular-score {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 6px solid var(--accent-teal);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 768px) {
+  .circular-score {
+    width: 130px;
+    height: 130px;
+    border: 8px solid var(--accent-teal);
+    margin-bottom: 1.5rem;
+  }
+}

@@ -1,0 +1,15 @@
+# Ignore build outputs
+dist/
+build/
+node_modules/
+
+# Ignore static assets (AI doesn't need to see icons)
+public/icons/
+*.png
+*.jpg
+*.svg
+*.ico
+
+# Ignore config files that don't change
+.gitignore
+package-lock.json
