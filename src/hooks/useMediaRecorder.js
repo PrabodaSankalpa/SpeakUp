@@ -10,25 +10,33 @@ export const useMediaRecorder = (onSilenceAnomaly) => {
   const analyserRef = useRef(null);
   const silenceTimerRef = useRef(null);
   const animationFrameRef = useRef(null);
+  const isRecordingRef = useRef(false);
 
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       
-      // 1. Initialize MediaRecorder for blob capture
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      // 1. Initialize MediaRecorder with a supported MIME type
+      const mimeType = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg', '']
+        .find(type => type === '' || MediaRecorder.isTypeSupported(type));
+      const recorderOptions = mimeType ? { mimeType } : undefined;
+      mediaRecorderRef.current = new MediaRecorder(stream, recorderOptions);
       chunksRef.current = [];
       mediaRecorderRef.current.ondataavailable = (e) => {
         if (e.data.size > 0) chunksRef.current.push(e.data);
       };
       mediaRecorderRef.current.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        const blob = new Blob(chunksRef.current, { type: mediaRecorderRef.current.mimeType || 'audio/webm' });
         setAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
       };
 
       // 2. Initialize Web Audio API for silence detection
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      // Resume AudioContext — required on mobile where it starts suspended
+      if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
       const source = audioContextRef.current.createMediaStreamSource(stream);
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.fftSize = 256;
@@ -42,7 +50,7 @@ export const useMediaRecorder = (onSilenceAnomaly) => {
       const SILENCE_DURATION_MS = parseInt(import.meta.env.VITE_SILENCE_DURATION_MS) || 3000;
 
       const checkVolume = () => {
-        if (!isRecording && mediaRecorderRef.current?.state !== 'recording') return;
+        if (!isRecordingRef.current && mediaRecorderRef.current?.state !== 'recording') return;
         
         analyserRef.current.getByteTimeDomainData(dataArray);
         
@@ -75,6 +83,7 @@ export const useMediaRecorder = (onSilenceAnomaly) => {
       };
 
       mediaRecorderRef.current.start();
+      isRecordingRef.current = true;
       setIsRecording(true);
       setError(null);
       checkVolume();
@@ -88,6 +97,7 @@ export const useMediaRecorder = (onSilenceAnomaly) => {
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
+      isRecordingRef.current = false;
       setIsRecording(false);
       
       // Cleanup Audio API
